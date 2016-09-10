@@ -112,28 +112,29 @@ var patrol = {
 				var newPokemonCount = 0;
 				// 比對每隻發現的將新發現的寶可夢儲存至 pokemons
 				nearbyPokemons.forEach(function(np) {
-					var isNeedSave = true;
+					np.needInfo = true;
+					var exist = false;
 
 					if (whitelist.length == 0 || whitelist.indexOf(np.pokemonId) >= 0) {
 						// 白名單未設定，或是在白名單中有找到，檢查黑名單
 						if (blacklist.indexOf(np.pokemonId) < 0) {
 							// 不在黑名單，檢查是否重複
-							pokemons.forEach(function(p) {
-								if (np.spawnPointId == p.spawnPointId && np.pokemonId == p.pokemonId) {
-									// 已存在，不儲存
-									isNeedSave = false;
+							for(var p of pokemons) {
+								if(p.spawnPointId == np.spawnPointId) {
+									exist = true;
+									break;
 								}
-							});
+							}
 						} else {
-							isNeedSave = false;
+							np.needInfo = false;
 						}
 					} else {
 						// 被白名單過濾
-						isNeedSave = false;
+						np.needInfo = false;
 					}
 
 					// 檢查完畢，確認是否需儲存
-					if (isNeedSave) {
+					if (!exist) {
 						// 要儲存，先幫他加上通知狀態，設為false
 						np.isInformed = false;
 						np.isErrorTime = false;
@@ -182,7 +183,9 @@ var patrol = {
 						// 尚未結束，確認是否未通知
 						if (!pokemons[i].isInformed) {
 							// 尚未通知，執行通知
-							event.emit("informToActiveUsers", pokemons[i], lastTime);
+							if(pokemons[i].needInfo) {
+								event.emit("informToActiveUsers", pokemons[i], lastTime);
+							}
 							io.emit('newPokemon', pokemons[i]);
 							pokemons[i].isInformed = true;
 						}
