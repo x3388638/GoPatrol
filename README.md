@@ -37,6 +37,7 @@ npm run build
 Start server
 ```
 cd PATH/TO/GoPatrol
+npm run build  
 npm start
 open 127.0.0.1:7774 (7774 is the default port)
 ```
