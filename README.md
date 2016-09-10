@@ -13,8 +13,8 @@ Clone and fill out the config
 ```
 git clone https://github.com/x3388638/GoPatrol.git
 cd GoPatrol
-mv example_config.js config.js
-vim config.js
+mv src/example_config.js src/config.js
+vim src/config.js
 ```
 Install modules
 ```
