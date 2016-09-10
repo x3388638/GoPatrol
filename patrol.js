@@ -1,6 +1,6 @@
 var patrol = {
 	start(serviceIndex, io) {
-		const config = require("./config.js");
+		const config = require("./config.js").configList[serviceIndex];
 		const TelegramBot = require("./telegramBot.js");
 		const pokemonNames = require("./pokemon_names.js");
 		const Jimp = require("jimp");
@@ -104,7 +104,7 @@ var patrol = {
 				console.log("thisSpotter runcount:" + pokespotters[thisSpotterId].runCount + "\n");
 			}
 
-			console.log("[" + getHHMMSS(spotterOptional.currentTime) + "] Service" + serviceIndex + " 開始巡邏...");
+			console.log("[" + getHHMMSS(spotterOptional.currentTime) + "] Service " + serviceIndex + " 開始巡邏...");
 			pokespotters[thisSpotterId].get(centerLocation, spotterOptional).then(function(nearbyPokemons) {
 				// 有跑進來表示沒卡住，把執行次數+1
 				pokespotters[thisSpotterId].runCount++;
