@@ -183,6 +183,7 @@ var patrol = {
 						if (!pokemons[i].isInformed) {
 							// 尚未通知，執行通知
 							event.emit("informToActiveUsers", pokemons[i], lastTime);
+							io.emit('newPokemon', pokemons[i]);
 							pokemons[i].isInformed = true;
 						}
 					} else {
@@ -639,6 +640,20 @@ var patrol = {
 			isDrawMap = false;
 			getmapUsers = [];
 		}
+		io.on('connection', function(socket) {
+			socket.on('giveMeCurrentPokemons', function(req) {
+				if(req) {
+					for (var i = pokemons.length - 1; i >= 0; i--) {
+						var lastTime = getLastTime(pokemons[i].expirationTime);
+						if (lastTime > 0 && lastTime <= fifteenMinutes) {
+								io.emit('newPokemon', pokemons[i]);
+						} else {
+							pokemons.splice(i, 1);
+						}
+					}
+				}
+			});
+		});
 	}
 }
 
