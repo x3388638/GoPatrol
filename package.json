@@ -10,7 +10,8 @@
     "node-telegram-bot-api": "^0.23.3",
     "open": "0.0.5",
     "pokespotter": "^0.1.5",
-    "request": "^2.74.0"
+    "request": "^2.74.0",
+    "socket.io": "^1.4.8"
   },
   "devDependencies": {},
   "scripts": {
