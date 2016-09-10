@@ -1,5 +1,6 @@
 var config = {
 	serviceCount: 1, 
+	clientPort: 7774, 
 	configList: [
 		{
 			account: [
