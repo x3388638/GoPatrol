@@ -171,6 +171,7 @@ var patrol = {
 			// 檢查ID正確才繼續跑，否則代表這個 Spotter 已經死了
 			if (thisSpotterId == runningSpotterId) {
 				console.log("[" + getHHMMSS(Date.now()) + "] 開始檢查結束時間並進行通知...\n");
+				var telegramMsg = '';
 				for (var i = pokemons.length - 1; i >= 0; i--) {
 					var lastTime = getLastTime(pokemons[i].expirationTime);
 					if (lastTime > 0) {
@@ -184,7 +185,15 @@ var patrol = {
 						if (!pokemons[i].isInformed) {
 							// 尚未通知，執行通知
 							if(pokemons[i].needInfo) {
-								event.emit("informToActiveUsers", pokemons[i], lastTime);
+								var questionMark = "";
+								if (pokemons[i].isErrorTime) {
+									questionMark = "?"
+								}
+								var link = "https://www.google.com/maps/?q=" + pokemons[i].latitude + "," + pokemons[i].longitude;
+								var name = "#" + pokemons[i].pokemonId + " " + pokemonNames[pokemons[i].pokemonId];
+								var detail = "剩餘: " + getMMSS(lastTime) + questionMark + " 結束於: " + getHHMMSS(pokemons[i].expirationTime) + questionMark;
+								var result = "<a href=\"" + link + "\">" + name + "</a>" + "\n" + detail + "\n\n";
+								telegramMsg += result;
 							}
 							io.emit('newPokemon', pokemons[i]);
 							pokemons[i].isInformed = true;
@@ -194,6 +203,7 @@ var patrol = {
 						pokemons.splice(i, 1);
 					}
 				}
+				event.emit("informToActiveUsers", telegramMsg);
 
 				// 判斷是否還有人在使用，有的話繼續下一次巡邏，否則不再觸發巡邏
 				prepareNextPatrol(thisSpotterId);
@@ -201,12 +211,14 @@ var patrol = {
 		});
 
 		// 將寶可夢通知給所有啟動中的使用者
-		event.on("informToActiveUsers", function(pokemon, lastTime) {
+		event.on("informToActiveUsers", function(msg) {
 			if (debug) {
 				console.log("on informToActiveUsers event.");
 			}
-			for (var i = 0; i < activeChatIDs.length; i++) {
-				sendPokemon(activeChatIDs[i], pokemon, lastTime);
+			if(msg.length > 0) {
+				for (var i = 0; i < activeChatIDs.length; i++) {
+					telegramBot.sendMessage(activeChatIDs[i], msg, {"parse_mode": "HTML"});
+				}
 			}
 		});
 
