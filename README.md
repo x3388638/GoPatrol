@@ -19,8 +19,6 @@ vim src/config.js
 Install modules
 ```
 npm install
-npm install express --save
-npm install socket.io --save
 ```
 Clone client and fill out config
 ```
