@@ -203,7 +203,11 @@ var patrol = {
 						pokemons.splice(i, 1);
 					}
 				}
-				event.emit("informToActiveUsers", telegramMsg);
+				if(telegramMsg.length > 0) {
+					var serviceName = config.serviceName || `Service ${serviceIndex}`;
+					var telegramMsg = `==== ${serviceName} 找到了 ====\n${telegramMsg}`;
+					event.emit("informToActiveUsers", telegramMsg);
+				}
 
 				// 判斷是否還有人在使用，有的話繼續下一次巡邏，否則不再觸發巡邏
 				prepareNextPatrol(thisSpotterId);
@@ -215,10 +219,8 @@ var patrol = {
 			if (debug) {
 				console.log("on informToActiveUsers event.");
 			}
-			if(msg.length > 0) {
-				for (var i = 0; i < activeChatIDs.length; i++) {
-					telegramBot.sendMessage(activeChatIDs[i], msg, {"parse_mode": "HTML"});
-				}
+			for (var i = 0; i < activeChatIDs.length; i++) {
+				telegramBot.sendMessage(activeChatIDs[i], msg, {"parse_mode": "HTML"});
 			}
 		});
 

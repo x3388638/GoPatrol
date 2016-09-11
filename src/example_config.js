@@ -3,6 +3,7 @@ var config = {
 	clientPort: 7774, 
 	configList: [
 		{
+			serviceName: '', 
 			account: [
 				{username: "", password: "", provider: ""}
 			],
