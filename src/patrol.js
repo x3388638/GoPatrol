@@ -340,7 +340,7 @@ var patrol = {
 		if (config.telegramChannelID != null) {
 			if (config.telegramChannelID.indexOf("@") == 0) {
 				console.log("廣播模式啟動\n");
-				telegramBot.sendMessage(config.telegramChannelID, `Service ${serviceIndex} 伺服器啟動，開始巡邏與通知`);
+				console.log(`Service ${serviceIndex} 伺服器啟動，開始巡邏與通知`);
 
 				// 將頻道ID存入 activeChatIDs
 				activeChatIDs = [config.telegramChannelID];
