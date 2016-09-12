@@ -1,6 +1,7 @@
 var config = {
 	serviceCount: 1, 
 	clientPort: 7774, 
+	timeout: 5*60, // wait how many seconds to start next service
 	configList: [
 		{
 			serviceName: '', 

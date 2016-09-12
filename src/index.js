@@ -16,6 +16,13 @@ http.listen(config.clientPort, '127.0.0.1', function(){
 	console.log('listening on 127.0.0.1:' + config.clientPort);
 });
 
-for(let i = 0; i < config.serviceCount; i++) {
-	patrol.start(i, io)
+start();
+function start(index = 0) {
+	patrol.start(index, io);
+	index ++;
+	if(index < config.serviceCount) {
+		setTimeout(function() {
+			start(index, io);
+		}, config.timeout*1000);
+	}
 }
