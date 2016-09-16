@@ -189,11 +189,12 @@ var patrol = {
 								if (pokemons[i].isErrorTime) {
 									questionMark = "?"
 								}
-								var link = "https://www.google.com/maps/?q=" + pokemons[i].latitude + "," + pokemons[i].longitude;
-								var name = "#" + pokemons[i].pokemonId + " " + pokemonNames[pokemons[i].pokemonId];
+								var title = `#${pokemons[i].pokemonId} ${pokemonNames[pokemons[i].pokemonId]}`;
+								var googleMap = `<a href='https://www.google.com/maps/?q=${pokemons[i].latitude},${pokemons[i].longitude}'>Google Map</a>`;
+								var pokemonMap = `<a href='https://moli.rocks:774/#/map/${pokemons[i].latitude},${pokemons[i].longitude}'>Pokemon Map</a>`;
 								var detail = "剩餘: " + getMMSS(lastTime) + questionMark + " 結束於: " + getHHMMSS(pokemons[i].expirationTime) + questionMark;
-								var result = "<a href=\"" + link + "\">" + name + "</a>" + "\n" + detail + "\n\n";
-								telegramMsg += result;
+								var result = `${title}\n→ ${googleMap}\n→ ${pokemonMap}\n${detail}\n\n`
+								telegramMsg += result; 
 							}
 							io.emit('newPokemon', pokemons[i]);
 							pokemons[i].isInformed = true;
